@@ -1,10 +1,11 @@
 import styled from "styled-components";
 
 export const FromStyledDiv = styled.div`
-  border: 5px solid darkgray;
+  border: 9px solid #011526;
+  margin: 1.5rem;
   border-radius: 50%;
-  background-color: grey;
-  opacity: 0.95;
+  background-color: #13678A;
+  opacity: 0.85;
   width: 30rem;
   height: 30rem;
   display: flex;
@@ -15,6 +16,6 @@ export const FromStyledDiv = styled.div`
 `
 export const FormStyledHeader = styled.p`
   font-family: 'Bree Serif', serif;
-  font-size: 2rem;
-
+  font-size: 2.1rem;
+  color: #011526;
 `
