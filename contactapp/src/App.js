@@ -16,7 +16,7 @@ function App() {
   return (
     <ContactContext.Provider value={{userContact, setUserContact}}>
       <Form />
-      {/* <Table /> */}
+      <Table />
     </ContactContext.Provider>
   );
 }

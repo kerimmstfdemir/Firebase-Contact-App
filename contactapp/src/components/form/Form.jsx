@@ -38,9 +38,9 @@ const Form = () => {
 
   const addUserButton = (user) => {
     const database = getDatabase(app)
-    const userRef = ref(database,"contacts/")
-    const newUserRef = push(userRef)
-    set(newUserRef, {
+    const userRef = push(ref(database,"contacts/"))
+    // const newUserRef = push(userRef)
+    set(userRef, {
         name:user.name,
         phoneNumber:user.phoneNumber,
         gender:user.gender
