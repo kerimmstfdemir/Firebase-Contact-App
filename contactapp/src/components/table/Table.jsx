@@ -5,6 +5,7 @@ import app from "../../utils/firebase"
 import { useEffect, useState } from "react"
 import DeleteIcon from '@mui/icons-material/Delete';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
+import EditTableData from "./EditTableData"
 
 const Table = () => {
     const [contactList, setContactList] = useState([]);
@@ -35,7 +36,7 @@ const Table = () => {
     <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center"}}>
     <TableStyledIncludingDiv>
         <p>CONTACTS</p>
-        <table>
+        <table className="text-center table table-striped table-hover" style={{width:"100%"}}>
             <thead>
                 <tr>
                     <th>Username</th>
@@ -54,13 +55,14 @@ const Table = () => {
                             <td>{phoneNumber}</td>
                             <td>{gender}</td>
                             <td><DeleteIcon style={{color:"#A62B1F", cursor:"pointer"}} onClick={() => handleDeleteData(id)}/></td>
-                            <td><BorderColorIcon style={{color:"gray"}}/></td>
+                            <td><BorderColorIcon data-bs-toggle="modal" data-bs-target="#editData" style={{color:"gray", cursor:"pointer"}}/></td>
                         </tr>
                     </tbody>
                 )
             })}
         </table>
     </TableStyledIncludingDiv>
+    <EditTableData />
     </div>
   )
 }
