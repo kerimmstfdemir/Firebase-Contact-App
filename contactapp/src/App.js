@@ -8,9 +8,9 @@ export const ContactContext = createContext();
 
 function App() {
   const [userContact, setUserContact] = useState({
-    name:"",
-    phoneNumber:"",
-    gender:""
+    name:"undefined",
+    phoneNumber:"undefined",
+    gender:"male"
   })
 
   return (
