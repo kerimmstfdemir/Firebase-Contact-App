@@ -16,20 +16,20 @@ const Form = () => {
     
   const genderSelect = [
     {
-      value: "male",
+      value: "Male",
       label: "Male",
     },
     {
-      value: "female",
+      value: "Female",
       label: "Female",
     },
     {
-      value: "other",
+      value: "Other",
       label: "Other",
     },
   ];
 
-  const [gender, setGender] = useState("male");
+  const [gender, setGender] = useState("Male");
 
   const handleChange = (event) => {
     setGender(event.target.value);

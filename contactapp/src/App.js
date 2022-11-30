@@ -10,7 +10,7 @@ function App() {
   const [userContact, setUserContact] = useState({
     name:"undefined",
     phoneNumber:"undefined",
-    gender:"male"
+    gender:"Male"
   })
 
   return (
