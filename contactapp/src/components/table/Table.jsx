@@ -7,16 +7,22 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import EditTableData from "./EditTableData"
 import { ContactContext } from "../../App"
+import { deleteSuccessNotify, errorNotify } from "../../utils/ToastifyNotifies"
 
 const Table = () => {
-    const [contactList, setContactList] = useState([]);
+    const [contactList, setContactList] = useState([""]);
     const { userContact, setUserContact } = useContext(ContactContext)
     const [dataId, setDataId] = useState("")
 
     const handleDeleteData = (id) => {
-        const database = getDatabase(app);
-        const dataRef = ref(database, `contacts/${id}`)
-        remove(dataRef)
+        try {
+            const database = getDatabase(app);
+            const dataRef = ref(database, `contacts/${id}`)
+            remove(dataRef)
+            deleteSuccessNotify("Deleted Contact")
+        } catch (error) {
+            console.log(error.message);
+        }
     }
 
     useEffect(()=>{
@@ -34,8 +40,6 @@ const Table = () => {
         })
     },[])
 
-    console.log(userContact);
-
   return (
     <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center"}}>
     <TableStyledIncludingDiv>
@@ -50,7 +54,8 @@ const Table = () => {
                     <th>Edit</th>
                 </tr>
             </thead>
-            {contactList.map((item)=>{
+            {contactList.length === 0 ? <td className="text-center p-2" colSpan="5">Nothing Found
+            {errorNotify("You have no contact!")}</td> : (contactList.map((item)=>{
                 const {id, name, gender, phoneNumber} = item
                 const handleEditButton = () => {
                     setUserContact({...userContact, name:name, gender:gender, phoneNumber:phoneNumber})
@@ -67,7 +72,7 @@ const Table = () => {
                         </tr>
                     </tbody>
                 )
-            })}
+            }))}
         </table>
     </TableStyledIncludingDiv>
     <EditTableData dataId={dataId}/>

@@ -9,6 +9,7 @@ import { useState, useContext } from "react";
 import { ContactContext } from "../../App";
 import app from "../../utils/firebase"
 import { getDatabase, ref, set, push } from "firebase/database"
+import { successNotify } from "../../utils/ToastifyNotifies";
 
 const Form = () => {
 
@@ -37,13 +38,17 @@ const Form = () => {
   };
 
   const addUserButton = (user) => {
-    const database = getDatabase(app)
-    const userRef = push(ref(database,"contacts/"))
-    set(userRef, {
-        name:user.name,
-        phoneNumber:user.phoneNumber,
-        gender:user.gender
-    })
+    try {
+      const database = getDatabase(app)
+      const userRef = push(ref(database,"contacts/"))
+      set(userRef, {
+          name:user.name,
+          phoneNumber:user.phoneNumber,
+          gender:user.gender})
+      successNotify("Contact added!")
+    }catch (error) {
+      console.log(error.message);
+    }
   }
 
   return (

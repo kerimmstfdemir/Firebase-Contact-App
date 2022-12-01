@@ -2,16 +2,21 @@ import { getDatabase, ref, update } from "firebase/database";
 import { useContext } from "react";
 import { ContactContext } from "../../App";
 import app from "../../utils/firebase";
+import { successNotify } from "../../utils/ToastifyNotifies";
 
 const EditTableData = ({ dataId }) => {
     const { userContact, setUserContact } = useContext(ContactContext)
 
     const handleUpdate = (userContact) => {
-        const database = getDatabase(app);
-        const dataRef = ref(database, `contacts/${dataId}`)
-        update(dataRef, userContact)
+        try {
+            const database = getDatabase(app);
+            const dataRef = ref(database, `contacts/${dataId}`)
+            update(dataRef, userContact)
+            successNotify("Successfully Updated!")
+        } catch (error) {
+            console.log(error.message);
+        }
     }
-    console.log(userContact);
     return (
         <div className="modal fade" id="editData" tabIndex={-1}>
             <div className="modal-dialog">
@@ -34,9 +39,9 @@ const EditTableData = ({ dataId }) => {
                                 <input type="tel" className="form-control" id="contactPhone" value={userContact.phoneNumber} onChange={(e) => setUserContact({...userContact, phoneNumber:e.target.value})}/>
                                 <label htmlFor="contactGender" className="form-label mt-2"><b>Gender :</b></label>
                                 <select id="contactGender" class="form-select form-select-md mb-1" aria-label=".form-select-md example" value={userContact.gender} onChange={(e) => setUserContact({...userContact, gender:e.target.value})}>
-                                    <option value="male">Male</option>
-                                    <option value="female">Female</option>
-                                    <option value="other">Other</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other</option>
                                 </select>
                             </div>
                         </form>
