@@ -13,6 +13,9 @@ import { successNotify } from "../../utils/ToastifyNotifies";
 
 const Form = () => {
 
+  const [ nameValue, setNameValue ] = useState("")
+  const [ phoneNumberValue, setPhoneNumberValue ] = useState("")
+
   const { userContact, setUserContact } = useContext(ContactContext)
     
   const genderSelect = [
@@ -32,6 +35,16 @@ const Form = () => {
 
   const [gender, setGender] = useState("Male");
 
+  const nameTextfieldArea = (e) => {
+    setNameValue(e.target.value);
+    setUserContact({...userContact, name:nameValue})
+  }
+
+  const phoneNumberTextfieldArea = (e) => {
+    setPhoneNumberValue(e.target.value);
+    setUserContact({...userContact, phoneNumber:phoneNumberValue})
+  }
+
   const handleChange = (event) => {
     setGender(event.target.value);
     setUserContact({...userContact, gender:event.target.value})
@@ -45,11 +58,16 @@ const Form = () => {
           name:user.name,
           phoneNumber:user.phoneNumber,
           gender:user.gender})
+      setUserContact({...userContact, name:"", phoneNumber:"", gender:"Male"})
+      setNameValue("");
+      setPhoneNumberValue("")
       successNotify("Contact added!")
     }catch (error) {
       console.log(error.message);
     }
   }
+
+  console.log(userContact)
 
   return (
     <div style={{display:"flex", justifyContent:"center"}}>
@@ -60,21 +78,23 @@ const Form = () => {
           <TextField 
           name="text"
           type="text" 
-          label="Name" 
+          label="Name"
+          value={nameValue}
           variant="standard" InputLabelProps={{style:{color:"white"}}} 
           inputProps={{style:{color:"white"}}}
-          onChange={(e) => setUserContact({...userContact, name:e.target.value})}/>
+          onChange={nameTextfieldArea}/>
         </Box>
         <Box sx={{ display: "flex", alignItems: "flex-end" }}>
           <CallIcon sx={{ color: "white", mr: 1, my: 0.5 }} />
           <TextField
             type="tel"
             label="Phone Number"
+            value={phoneNumberValue}
             variant="standard"
             InputLabelProps={{style:{color:"white"}}}
             sx={{input:{color:"white"}}}
             inputProps={{pattern:"[0-9]"}}
-            onChange={(e) => setUserContact({...userContact, phoneNumber:e.target.value})}
+            onChange={phoneNumberTextfieldArea}
           />
         </Box>
       <Box
