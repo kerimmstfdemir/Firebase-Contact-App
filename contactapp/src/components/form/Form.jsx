@@ -9,7 +9,7 @@ import { useState, useContext } from "react";
 import { ContactContext } from "../../App";
 import app from "../../utils/firebase"
 import { getDatabase, ref, set, push } from "firebase/database"
-import { successNotify } from "../../utils/ToastifyNotifies";
+import { successNotify, adduserErrorNotify } from "../../utils/ToastifyNotifies";
 
 const Form = () => {
 
@@ -35,39 +35,31 @@ const Form = () => {
 
   const [gender, setGender] = useState("Male");
 
-  const nameTextfieldArea = (e) => {
-    setNameValue(e.target.value);
-    setUserContact({...userContact, name:nameValue})
-  }
-
-  const phoneNumberTextfieldArea = (e) => {
-    setPhoneNumberValue(e.target.value);
-    setUserContact({...userContact, phoneNumber:phoneNumberValue})
-  }
-
   const handleChange = (event) => {
     setGender(event.target.value);
     setUserContact({...userContact, gender:event.target.value})
   };
 
-  const addUserButton = (user) => {
-    try {
-      const database = getDatabase(app)
-      const userRef = push(ref(database,"contacts/"))
-      set(userRef, {
-          name:user.name,
-          phoneNumber:user.phoneNumber,
-          gender:user.gender})
-      setUserContact({...userContact, name:"", phoneNumber:"", gender:"Male"})
-      setNameValue("");
-      setPhoneNumberValue("")
-      successNotify("Contact added!")
-    }catch (error) {
-      console.log(error.message);
+  const addUserButton = () => {
+    if (nameValue && phoneNumberValue) {
+      try {
+        const database = getDatabase(app)
+        const userRef = push(ref(database,"contacts/"))
+        set(userRef, {
+            name:nameValue,
+            phoneNumber:phoneNumberValue,
+            gender:gender})
+        setUserContact({...userContact, name:"", phoneNumber:"", gender:"Male"})
+        setNameValue("");
+        setPhoneNumberValue("")
+        successNotify("Contact added!")
+      }catch (error) {
+        console.log(error.message);
+      }
+    } else {
+      adduserErrorNotify("Name and Phone Number can't be empty!")
     }
   }
-
-  console.log(userContact)
 
   return (
     <div style={{display:"flex", justifyContent:"center"}}>
@@ -82,7 +74,7 @@ const Form = () => {
           value={nameValue}
           variant="standard" InputLabelProps={{style:{color:"white"}}} 
           inputProps={{style:{color:"white"}}}
-          onChange={nameTextfieldArea}/>
+          onChange={(e) => setNameValue(e.target.value)}/>
         </Box>
         <Box sx={{ display: "flex", alignItems: "flex-end" }}>
           <CallIcon sx={{ color: "white", mr: 1, my: 0.5 }} />
@@ -94,7 +86,7 @@ const Form = () => {
             InputLabelProps={{style:{color:"white"}}}
             sx={{input:{color:"white"}}}
             inputProps={{pattern:"[0-9]"}}
-            onChange={phoneNumberTextfieldArea}
+            onChange={(e) => setPhoneNumberValue(e.target.value)}
           />
         </Box>
       <Box
@@ -120,7 +112,7 @@ const Form = () => {
         </TextField>
         </div>
       </Box>
-      <Button variant="contained" onClick={() => addUserButton(userContact)}>Add</Button>
+      <Button variant="contained" onClick={() => addUserButton()}>Add</Button>
     </FromStyledDiv>
     </div>
   );
